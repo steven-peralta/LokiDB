@@ -50,15 +50,17 @@ export class LokiEventEmitter {
    */
   protected emit(eventName: string, ...data: any[]): void {
     if (eventName && this._events[eventName]) {
-      this._events[eventName].forEach((listener: Function) => {
-        if (this._asyncListeners) {
-          setTimeout(() => {
+      if (this._events[eventName].length) {
+        this._events[eventName].forEach((listener: Function) => {
+          if (this._asyncListeners) {
+            setTimeout(() => {
+              listener(...data);
+            }, 1);
+          } else {
             listener(...data);
-          }, 1);
-        } else {
-          listener(...data);
-        }
-      });
+          }
+        });
+      }
     }
   }
 
